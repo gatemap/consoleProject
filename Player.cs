@@ -207,7 +207,8 @@ namespace consoleProejct
                     break;
             }
 
-            if(!playSound.inAdvance && playMode)
+            if (!playSound.inAdvance && playMode)
+                ;
         }
 
         void selectedSong()
