@@ -1,6 +1,5 @@
 ﻿using System;
-using IrrKlang;
-using static System.Console;
+
 
 namespace consoleProejct
 {
