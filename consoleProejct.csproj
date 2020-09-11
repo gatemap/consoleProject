@@ -62,11 +62,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameExplain.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="InGameScene.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectMusicMenu.cs" />
     <Compile Include="Sound.cs" />
   </ItemGroup>
   <ItemGroup>

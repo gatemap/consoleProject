@@ -1,33 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using static System.Console;
 
 namespace consoleProejct
 {
-    class MainMenu
+    class InGameScene
     {
-        public bool menuSelect = true;
-        public bool selected = false;
-        public enum MenuState
-        {
-            gameStart, explain, exit, menuState_Max
-        };
-
-        public MenuState menu = MenuState.gameStart;
-
-        public void Init()
-        {
-            menuPrint();
-        }
+        public bool isPlaying = false;
 
         public void Render()
         {
-            menuPrint();
+            printBanner();
+            inGamePrint();
         }
 
-        void menuPrint()
+        void inGamePrint()
+        {
+
+        }
+
+        void printBanner()
         {
             SetCursorPosition(0, 0);
-            CursorVisible = false;
 
             ForegroundColor = ConsoleColor.Yellow;
             WriteLine("\t★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★\t");
@@ -58,14 +55,6 @@ namespace consoleProejct
             WriteLine();
             WriteLine();
             ForegroundColor = ConsoleColor.White;
-            WriteLine("\t\t\t\tGame Start");
-            WriteLine("\t\t\t\tHow to Play");
-            WriteLine("\t\t\t\tExit");
-            WriteLine();
-            WriteLine();
-            WriteLine();
-            WriteLine();
-            WriteLine("\t\t\tPress spaceBar for chosse menu.");
         }
     }
 }

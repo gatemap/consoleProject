@@ -3,31 +3,34 @@ using static System.Console;
 
 namespace consoleProejct
 {
-    class MainMenu
+    class SelectMusicMenu
     {
-        public bool menuSelect = true;
-        public bool selected = false;
-        public enum MenuState
-        {
-            gameStart, explain, exit, menuState_Max
-        };
-
-        public MenuState menu = MenuState.gameStart;
+        public bool musicSelect = false;
 
         public void Init()
         {
-            menuPrint();
+            printBanner();
         }
 
         public void Render()
         {
-            menuPrint();
+            printBanner();
+            songList();
         }
 
-        void menuPrint()
+        void songList()
+        {
+            ForegroundColor = ConsoleColor.White;
+            WriteLine("\t\t\t\t홍연");
+            WriteLine("\t\t\t\tK/DA");
+            WriteLine("\t\t\t\tLost stars");
+            WriteLine("\t\t\t\tSee you again");
+            WriteLine("\t\t\t\tTry everything");
+        }
+
+        void printBanner()
         {
             SetCursorPosition(0, 0);
-            CursorVisible = false;
 
             ForegroundColor = ConsoleColor.Yellow;
             WriteLine("\t★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★\t");
@@ -58,14 +61,6 @@ namespace consoleProejct
             WriteLine();
             WriteLine();
             ForegroundColor = ConsoleColor.White;
-            WriteLine("\t\t\t\tGame Start");
-            WriteLine("\t\t\t\tHow to Play");
-            WriteLine("\t\t\t\tExit");
-            WriteLine();
-            WriteLine();
-            WriteLine();
-            WriteLine();
-            WriteLine("\t\t\tPress spaceBar for chosse menu.");
         }
     }
 }

@@ -7,12 +7,15 @@ namespace consoleProejct
     {
         static void Main(string[] args)
         {
-            WriteLine("Test");
-
             GameManager game = new GameManager();
             game.Init();
 
-            ReadLine();
+            while(game.gameState)
+            {
+                game.Update();
+                game.Render();
+            }
+
         }
     }
 }
