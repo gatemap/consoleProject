@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/plugins/ikpMP3/readme.txt
+/plugins/ikpMP3/license.txt

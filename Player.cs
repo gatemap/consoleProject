@@ -5,27 +5,55 @@ namespace consoleProejct
 {
     class Player
     {
+        MainMenu mainMenu;
+        Sound playSound;
         int score = 0;
         ConsoleKeyInfo c;
 
+        public Player()
+        {
+            playSound = new Sound();
+            mainMenu = new MainMenu();
+        }
+
         public void Update()
         {
-            if (KeyAvailable)
+            if (playSound.selectMode)
             {
-                c = ReadKey();
-
-                switch (c.Key)
+                if (KeyAvailable)
                 {
-                    case ConsoleKey.UpArrow:
-                        break;
-                    case ConsoleKey.DownArrow:
-                        break;
-                    case ConsoleKey.RightArrow:
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        break;
-                    case ConsoleKey.Spacebar:
-                        break;
+                    c = ReadKey();
+
+                    switch (c.Key)
+                    {
+                        case ConsoleKey.UpArrow:
+                            break;
+                        case ConsoleKey.DownArrow:
+                            break;
+                        case ConsoleKey.Spacebar:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                if (KeyAvailable)
+                {
+                    c = ReadKey();
+
+                    switch (c.Key)
+                    {
+                        case ConsoleKey.UpArrow:
+                            break;
+                        case ConsoleKey.DownArrow:
+                            break;
+                        case ConsoleKey.RightArrow:
+                            break;
+                        case ConsoleKey.LeftArrow:
+                            break;
+                        case ConsoleKey.Spacebar:
+                            break;
+                    }
                 }
             }
         }
