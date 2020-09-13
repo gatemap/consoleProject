@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Console;
 
 namespace consoleProejct
@@ -10,6 +6,9 @@ namespace consoleProejct
     class InGameScene
     {
         public bool isPlaying = false;
+        ConsoleColor[] fontAnim = { ConsoleColor.DarkRed, ConsoleColor.Red, ConsoleColor.DarkYellow,
+                                    ConsoleColor.Green, ConsoleColor.DarkGreen, ConsoleColor.Blue,
+                                    ConsoleColor.DarkBlue, ConsoleColor.DarkMagenta};
 
         public void Render()
         {
@@ -55,6 +54,14 @@ namespace consoleProejct
             WriteLine();
             WriteLine();
             ForegroundColor = ConsoleColor.White;
+        }
+
+        void fontAnimation()
+        {
+            for(int i=1;i<fontAnim.Length;i++)
+            {
+                ConsoleColor tmp; 
+            }
         }
     }
 }

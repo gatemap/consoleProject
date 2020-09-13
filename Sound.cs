@@ -47,10 +47,8 @@ namespace consoleProejct
                 VolumeSetting();
             }
 
-            if(!inAdvance)
-            {
-
-            }
+            if (!inAdvance)
+                playSelectSong();
 
         }
 
