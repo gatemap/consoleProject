@@ -33,11 +33,14 @@ namespace consoleProejct
 
         public void Update()
         {
-            moving = false;
-
-            if(selectMode)
+            if(moving)
             {
+                moving = false;
                 bgm.Stop();
+            }
+
+            if (selectMode)
+            {
                 timer.Restart();
 
                 // 0.5초 딜레이
@@ -60,26 +63,36 @@ namespace consoleProejct
                     bgm = engine.Play2D(soundPath + "HongYeon.mp3");
                     if (inAdvance)
                         bgm.PlayPosition = 78 * 1000;
+                    else
+                        bgm.PlayPosition = 0;
                     break;
                 case Music.K_DA:
                     bgm = engine.Play2D(soundPath + "K_DA.mp3");
                     if (inAdvance)
                         bgm.PlayPosition = 52 * 1000;
+                    else
+                        bgm.PlayPosition = 0;
                     break;
                 case Music.Lost_stars:
                     bgm = engine.Play2D(soundPath + "Lost stars.mp3");
                     if (inAdvance)
                         bgm.PlayPosition = 158 * 1000;
+                    else
+                        bgm.PlayPosition = 0;
                     break;
                 case Music.See_you_agin:
                     bgm = engine.Play2D(soundPath + "See you again.mp3");
                     if (inAdvance)
                         bgm.PlayPosition = 10 * 1000;
+                    else
+                        bgm.PlayPosition = 0;
                     break;
                 case Music.Try_everything:
                     bgm = engine.Play2D(soundPath + "Try everything.mp3");
                     if (inAdvance)
                         bgm.PlayPosition = 48 * 1000;
+                    else
+                        bgm.PlayPosition = 0;
                     break;
             }
         }
@@ -93,7 +106,7 @@ namespace consoleProejct
             {
                 if (timer.ElapsedMilliseconds * 0.001 > sec)
                 {
-                    sec += 0.1f;
+                    sec += 1f;
                     bgm.Volume += 0.1f;
                 }
             }

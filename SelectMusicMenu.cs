@@ -60,7 +60,6 @@ namespace consoleProejct
             WriteLine("\t★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★\t");
             WriteLine();
             WriteLine();
-            ForegroundColor = ConsoleColor.White;
         }
     }
 }
