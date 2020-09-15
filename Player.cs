@@ -77,7 +77,7 @@ namespace consoleProejct
             if (playMode && inGame != null)
             {
                 inGame.Update();
-                if (inGame.noteStart && !inGame.inputSuccess && !playSound.fin && inGame.verdict >= 0)
+                if (inGame.noteStart && !inGame.inputSuccess && !playSound.fin && inGame.verdict > 0)
                     playGameKeySettings();
 
                 // miss 판정
@@ -276,22 +276,27 @@ namespace consoleProejct
                     case ConsoleKey.UpArrow:
                         if (inGame.inList.Count != outList.Count)
                             outList.Add("↑");
+                        playSound.playKeyEffectSound();
                         break;
                     case ConsoleKey.DownArrow:
                         if (inGame.inList.Count != outList.Count)
                             outList.Add("↓");
+                        playSound.playKeyEffectSound();
                         break;
                     case ConsoleKey.RightArrow:
                         if (inGame.inList.Count != outList.Count)
                             outList.Add("→");
+                        playSound.playKeyEffectSound();
                         break;
                     case ConsoleKey.LeftArrow:
                         if (inGame.inList.Count != outList.Count)
                             outList.Add("←");
+                        playSound.playKeyEffectSound();
                         break;
                     case ConsoleKey.Spacebar:
                         if (checkNote())
                         {
+                            playSound.playInputEffectSound();
                             combo++;
                             inGame.upCount++;
                             scoreMark();
@@ -409,7 +414,7 @@ namespace consoleProejct
             Write($"Bad : {result[1]}");
             SetCursorPosition(25, 19);
             Write($"Miss : {result[0]}");
-            SetCursorPosition(37, 19);
+            SetCursorPosition(39, 19);
             Write($"Maxcombo : {maxCombo}, resultScore : {score}");
 
             SetCursorPosition(0, 21);
