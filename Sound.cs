@@ -9,6 +9,8 @@ namespace consoleProejct
         public bool selectMode = false; 
         public bool moving = false;     // 커서를 움직이는 중인가
         public bool inAdvance = true;   // 미리듣기 모드
+        public bool fin { get; private set; } = false;
+        
         public enum Music
         {
             HongYeon, K_DA, Lost_stars, See_you_agin, Try_everything, music_max
@@ -20,6 +22,7 @@ namespace consoleProejct
         ISound bgm;
         Stopwatch timer;
         string soundPath = "../../sound/";
+        bool isPlaying = false;
 
         public Sound()
         {
@@ -42,16 +45,24 @@ namespace consoleProejct
             if (selectMode)
             {
                 timer.Restart();
+                isPlaying = false;
 
                 // 0.5초 딜레이
                 while (timer.ElapsedMilliseconds < 500)
                     ;
+
                 playSelectSong();
                 VolumeSetting();
             }
 
-            if (!inAdvance)
+            if (!inAdvance && !isPlaying)
+            { 
                 playSelectSong();
+                isPlaying = true;
+            }
+
+            if (bgm.Finished)
+                fin = true;
 
         }
 
@@ -64,7 +75,8 @@ namespace consoleProejct
                     if (inAdvance)
                         bgm.PlayPosition = 78 * 1000;
                     else
-                        bgm.PlayPosition = 0;
+                        //bgm.PlayPosition = 0;
+                        bgm.PlayPosition = 270 * 1000;
                     break;
                 case Music.K_DA:
                     bgm = engine.Play2D(soundPath + "K_DA.mp3");

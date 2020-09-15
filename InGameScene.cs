@@ -7,11 +7,11 @@ namespace consoleProejct
 {
     class InGameScene
     {
-        public bool isPlaying = false;      // 게임중인가
-        public bool inputSuccess = false;   // 완벽하게 입력을 성공했는가
         public bool noteStart { get; private set; } = false;     // 노트 시작
+        public bool inputSuccess = false;                       // 정확한 입력 체크
         public List<String> inList;
-        public byte verdict { get; private set; } = 0;
+        public byte verdict { get; private set; } = 0;          // 판정
+        public byte upCount = 0;
 
         List<ConsoleColor> fontAnim = new List<ConsoleColor>(){ ConsoleColor.DarkRed, ConsoleColor.Red, ConsoleColor.DarkYellow,
                                     ConsoleColor.Green, ConsoleColor.DarkGreen, ConsoleColor.Blue,
@@ -21,10 +21,10 @@ namespace consoleProejct
         public byte level { get; private set; } = 1;
         float sec = 0f;
         float castingSec = 0f;
+        byte timeAtt = 7;
         
         Stopwatch timeCheck;
         Stopwatch castingTimer;
-        ConsoleKeyInfo cKey;
 
         public InGameScene()
         {
@@ -42,14 +42,6 @@ namespace consoleProejct
                 sec += 1f;
                 fontAnimation();
             }
-
-            if(KeyAvailable)
-            {
-                cKey = ReadKey();
-                // esc 입력시 플레이 중이던 음악 종료
-                if (cKey.Equals(ConsoleKey.Escape))
-                    isPlaying = false;
-            }
         }
 
         public void Render()
@@ -60,55 +52,128 @@ namespace consoleProejct
                 castingBar();
         }
 
-        public void levelUp()
+        public void levelUpCount()
         {
-            if (level < 7) level++;
+            switch (level)
+            {
+                case 1:
+                    if (upCount > 0)
+                        levelUp();
+                    break;
+                case 2:
+                    if (upCount > 1)
+                        levelUp();
+                    break;
+                case 3:
+                    if (upCount > 2)
+                        levelUp();
+                    break;
+                case 4:
+                    if (upCount > 3)
+                        levelUp();
+                    break;
+                case 5:
+                    if (upCount > 4)
+                        levelUp();
+                    break;
+                case 6:
+                    if (upCount > 5)
+                        levelUp();
+                    break;
+                case 7:
+                    if (upCount > 4)
+                    {
+                        Stopwatch tmpTimer = new Stopwatch();
+                        tmpTimer.Start();
+                        // 3초 쉬기
+                        while (tmpTimer.ElapsedMilliseconds > 3000)
+                            ;
+                        level = 5;
+                        upCount = 0;
+                    }
+                    break;
+            }
+        }
+
+        void levelUp()
+        {
+            if (level < 7)
+            {
+                level++;
+                upCount = 0;
+            }
         }
 
         void inGamePrint()
         {
             ForegroundColor = ConsoleColor.White;
-            Write($"\t\t\t현재 레벨 : {level}\n");
-            Write($"\t\t\t흐른 시간 : {sec}초\n");
-            if(sec > 3f)
+            Write($"\t\t현재 레벨 : {level}\n");
+
+            if(sec >= 3f)
             {
                 noteStart = true;
-                Write("\t\t\t입력할 노트 : ");
-                randomArrow(level);
+                castingTimer.Start();
+
+                if (verdict == 0)
+                    inputSuccess = false;
+
+                SetCursorPosition(0, 10);
+
+                if(!inputSuccess)
+                {
+                    Write("\t\t입력할 노트 : ");
+                    if(verdict==0)
+                        randomArrow(level);
+                }
+                else
+                    Write("\t\t입력할 노트 :\t\t\t");
             }
         }
 
         void castingBar()
         {
-            SetCursorPosition(40, 10);
+            SetCursorPosition(40, 8);
             
-            if (castingTimer.ElapsedMilliseconds *0.0001 > castingSec && verdict < 15)
+            if (castingTimer.ElapsedMilliseconds *0.001 > castingSec && verdict <= timeAtt)
             {
                 castingSec++;
                 verdict++;
 
-                if (verdict > 0)
-                    BackgroundColor = ConsoleColor.Black;
-                else if (verdict > 8)
-                    BackgroundColor = ConsoleColor.DarkBlue;
-                else if (verdict == 11)
-                    BackgroundColor = ConsoleColor.Blue;
-                else if (verdict > 11)
-                    BackgroundColor = ConsoleColor.DarkBlue;
-                else if (verdict > 14)
-                    BackgroundColor = ConsoleColor.Black;
+                for (int i = 1; i <= castingSec; i++)
+                {
+                    if (i > 6)
+                        BackgroundColor = ConsoleColor.DarkGray;
+                    else if (i > 4)
+                        BackgroundColor = ConsoleColor.DarkBlue;
+                    else if (i == 4)
+                        BackgroundColor = ConsoleColor.Blue;
+                    else if (i > 1)
+                        BackgroundColor = ConsoleColor.DarkBlue;
+                    else if (i > 0)
+                        BackgroundColor = ConsoleColor.DarkGray;
 
-                for (int i = 0; i < (int)castingSec; i++)
-                    Write(" ");
+                    if (BackgroundColor == ConsoleColor.DarkGray)
+                        Write("   ");
+                    else if(BackgroundColor == ConsoleColor.DarkBlue)
+                        Write("  ");
+                    else if(BackgroundColor == ConsoleColor.Blue)
+                        Write(" ");
+                }
             }
 
             BackgroundColor = ConsoleColor.Black;
 
-            if(verdict == 15)
+            if(verdict > timeAtt)
             {
                 castingSec = 0f;
                 verdict = 0;
                 castingTimer.Restart();
+
+                if(!inputSuccess)
+                    inList.Clear();
+
+                SetCursorPosition(40, 8);
+                Write("\t\t\t\t");
             }
         }
 
@@ -151,8 +216,8 @@ namespace consoleProejct
         void fontAnimation()
         {
             ConsoleColor tmp = fontAnim[0];
-            fontAnim.Add(tmp);
             fontAnim.RemoveAt(0);
+            fontAnim.Add(tmp);
         }
 
         void randomArrow(int n)
@@ -164,7 +229,6 @@ namespace consoleProejct
                 Write($"{arrow[index]}");
                 inList.Add(arrow[index]);
             }
-            WriteLine();
         }
     }
 }

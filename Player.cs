@@ -15,11 +15,14 @@ namespace consoleProejct
         InGameScene inGame;
         GameExplain explain;
 
-        uint score = 0;
-        byte combo = 1;
         ConsoleKeyInfo c;
-        int[] cursurPos = new int[2];
         List<String> outList;
+        uint score = 0;
+        ushort combo = 1;
+        ushort maxCombo = 0;
+        int[] cursurPos = new int[2];
+        // 0 : miss, 1 : bad, 2 : cool, 3 : great, 4 : perfect
+        ushort[] result = new ushort[5];
 
         public Player()
         {
@@ -44,35 +47,53 @@ namespace consoleProejct
             if (mainMenu.menuSelect)
                 mainMenuKeySettings();
 
-            if(selectMusic != null && selectMusic.musicSelect)
-                selectMusic = null;
-
-            if (playSound.selectMode)
-            {
-                if(playSound.moving)
-                    playSound.Update();
-
-                selectMusicKeySettings();
-            }
-
+            // game explain
             if (explain != null)
             {
                 explain.Update();
-                if(explain.exitExplain)
+                if (explain.exitExplain)
                 {
                     explain = null;
                     Clear();
-                    
+
                     mainMenu.menuSelect = true;
                     mainMenu.selected = false;
                 }
             }
 
-            if (playMode)
+            // select Song view
+            if (selectMusic != null && selectMusic.musicSelect)
+                selectMusic = null;
+
+            // select Song advance song play
+            if (playSound.selectMode)
+            {
+                if (playSound.moving)
+                    playSound.Update();
+
+                selectMusicKeySettings();
+            }
+
+            if (playMode && inGame != null)
             {
                 inGame.Update();
-                if(inGame.noteStart)
+                if (inGame.noteStart && !inGame.inputSuccess && !playSound.fin)
                     playGameKeySettings();
+
+                // miss 판정
+                if (!inGame.inputSuccess && inGame.verdict >= 7)
+                {
+                    combo = 1;
+                    result[0]++;
+                }
+
+                if (combo > maxCombo)
+                    maxCombo = combo;
+
+                if (!playSound.fin)
+                    playSound.Update();
+                else
+                    resultKeySettings();
             }
         }
 
@@ -85,6 +106,9 @@ namespace consoleProejct
                 mainMenu.Render();
             }
 
+            if (explain != null)
+                explain.Render();
+
             if (playSound.selectMode)
             {
                 SetCursorPosition(cursurPos[0], cursurPos[1]);
@@ -92,11 +116,19 @@ namespace consoleProejct
                 selectMusic.Render();
             }
 
-            if (explain != null)
-                explain.Render();
-
             if (inGame != null)
-                inGame.Render();
+            {
+                if(!playSound.fin)
+                {
+                    inGame.Render();
+                    printCurrScore();
+                }
+                else
+                    printResult();
+
+                if (inGame.noteStart)
+                    printOutnote();
+            }
         }
 
         void mainMenuKeySettings()
@@ -144,7 +176,7 @@ namespace consoleProejct
         void mainMenuSelected()
         {
             Clear();
-            
+
             switch (mainMenu.menu)
             {
                 case MainMenu.MenuState.gameStart:
@@ -195,8 +227,9 @@ namespace consoleProejct
                     case ConsoleKey.Spacebar:
                         playSound.moving = true;            // 미리듣기 bgm stop용
                         playSound.inAdvance = false;        // 2222
-                        selectMusic.musicSelect = true;     
+                        selectMusic.musicSelect = true;
                         playSound.selectMode = false;       // selectMode 벗어나기
+                        playSound.Update();
                         playMode = true;
                         break;
                 }
@@ -228,25 +261,6 @@ namespace consoleProejct
             }
         }
 
-        void selectedSong()
-        {
-            switch (playSound.selectMusic)
-            {
-                case Sound.Music.HongYeon:
-                    break;
-                case Sound.Music.K_DA:
-                    break;
-                case Sound.Music.Lost_stars:
-                    break;
-                case Sound.Music.See_you_agin:
-                    break;
-                case Sound.Music.Try_everything:
-                    break;
-                case Sound.Music.music_max:
-                    break;
-            }
-        }
-
         void playGameKeySettings()
         {
             if (KeyAvailable)
@@ -256,51 +270,99 @@ namespace consoleProejct
                 switch (c.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        Write("↑");
-                        outList.Add("↑");
+                        if (inGame.inList.Count != outList.Count)
+                            outList.Add("↑");
                         break;
                     case ConsoleKey.DownArrow:
-                        Write("↓");
-                        outList.Add("↓");
+                        if (inGame.inList.Count != outList.Count)
+                            outList.Add("↓");
                         break;
                     case ConsoleKey.RightArrow:
-                        Write("→");
-                        outList.Add("→");
+                        if (inGame.inList.Count != outList.Count)
+                            outList.Add("→");
                         break;
                     case ConsoleKey.LeftArrow:
-                        Write("←");
-                        outList.Add("←");
+                        if (inGame.inList.Count != outList.Count)
+                            outList.Add("←");
                         break;
                     case ConsoleKey.Spacebar:
                         if (checkNote())
-                        { 
+                        {
                             combo++;
+                            inGame.upCount++;
                             scoreMark();
+                            inGame.levelUpCount();
+                            inGame.inputSuccess = true;
+                            outList.Clear();
+                            inGame.inList.Clear();
+                            SetCursorPosition(0, 11);
+                            Write("\t\t입력한 노트 :\t\t\t");
                         }
                         break;
                 }
             }
+        }
 
-            if (!checkNote())
+        void resultKeySettings()
+        {
+            if (KeyAvailable)
             {
-                outList.Clear();
-                Write("입력한 노트 : \t\t\t");
+                c = ReadKey();
+
+                switch (c.Key)
+                {
+                    case ConsoleKey.Escape:
+                        exit = true;
+                        break;
+                    case ConsoleKey.R:
+                        if (inGame != null)
+                            inGame = null;
+                        Clear();
+                        playMode = false;
+                        selectMusic = new SelectMusicMenu();
+                        selectMusic.musicSelect = false;
+                        playSound.moving = true;
+                        playSound.inAdvance = true;
+                        playSound.selectMode = true;
+                        break;
+                }
             }
         }
 
         void printOutnote()
         {
-            Write("입력한 노트 : ");
+            // 틀렸거나 시간이 초과되었을 때 입력하는 부분 초기화 하는 코드
+            if (!checkNote() || inGame.verdict == 0)
+            {
+                outList.Clear();
+                SetCursorPosition(0, 11);
+                Write("\t\t입력한 노트 :\t\t\t");
+            }
+
+            SetCursorPosition(0, 11);
+            Write("\t\t입력한 노트 : ");
+            foreach (string str in outList)
+                Write($"{str}");
+        }
+
+        void printCurrScore()
+        {
+            SetCursorPosition(0, 9);
+            Write($"\t\t현재 점수 : {score}");
         }
 
         bool checkNote()
         {
-            for(int i=0;i<outList.Count;i++)
+            if (inGame.inList.Count > 0 && outList.Count > 0)
             {
-                if (!outList[i].Equals(inGame.inList[i]))
-                    return false;
+                for (int i = 0; i < outList.Count; i++)
+                {
+                    if (!outList[i].Equals(inGame.inList[i]))
+                        return false;
+                }
+                return true;
             }
-            return true;
+            return false;
         }
 
         void scoreMark()
@@ -308,29 +370,47 @@ namespace consoleProejct
             switch (inGame.verdict)
             {
                 // 판정 bad
-                case 8:
-                case 14:
-                    score += (uint) (inGame.level * combo * 0.6);
+                case 1:
+                case 7:
+                    score += (uint)(inGame.level * combo * 0.6);
+                    result[1]++;
                     break;
                 // 판정 cool
-                case 9:
-                case 13:
+                case 2:
+                case 6:
                     score += (uint)(inGame.level * combo * 0.7);
+                    result[2]++;
                     break;
                 // 판정 great
-                case 10:
-                case 12:
+                case 3:
+                case 5:
                     score += (uint)(inGame.level * combo * 0.8);
+                    result[3]++;
                     break;
                 // 판정 perfect
-                case 11:
+                case 4:
                     score += (uint)(inGame.level * combo * 1.0);
-                    break;
-                // 판정 miss
-                default:
-                    combo = 1;
+                    result[4]++;
                     break;
             }
+        }
+        void printResult()
+        {
+            SetCursorPosition(25, 15);
+            Write($"Perfect : {result[4]}");
+            SetCursorPosition(25, 16);
+            Write($"Great : {result[3]}");
+            SetCursorPosition(25, 17);
+            Write($"Cool : {result[2]}");
+            SetCursorPosition(25, 18);
+            Write($"Bad : {result[1]}");
+            SetCursorPosition(25, 19);
+            Write($"Miss : {result[0]}");
+            SetCursorPosition(37, 19);
+            Write($"Maxcombo : {maxCombo}, resultScore : {score}");
+
+            SetCursorPosition(0, 21);
+            Write("\t\tPress R to reselect Song. For exit game is press esc.");
         }
     }
 }
