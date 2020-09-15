@@ -66,6 +66,16 @@ namespace consoleProejct
 
         }
 
+        public void playKeyEffectSound()
+        {
+            engine.Play2D(soundPath + "snare.ogg");
+        }
+
+        public void playInputEffectSound()
+        {
+            engine.Play2D(soundPath + "hat.ogg");
+        }
+
         void playSelectSong()
         {
             switch (selectMusic)
