@@ -85,13 +85,21 @@ namespace consoleProejct
                     break;
                 case 7:
                     if (upCount > 4)
+                        levelUp();
+                    break;
+                case 8:
+                    if (upCount > 3)
+                        levelUp();
+                    break;
+                case 9:
+                    if (upCount > 3)
                     {
                         Stopwatch tmpTimer = new Stopwatch();
                         tmpTimer.Start();
                         // 3초 쉬기
                         while (tmpTimer.ElapsedMilliseconds > 3000)
                             ;
-                        level = 5;
+                        level = 6;
                         upCount = 0;
                     }
                     break;
@@ -100,7 +108,7 @@ namespace consoleProejct
 
         void levelUp()
         {
-            if (level < 7)
+            if (level < 9)
             {
                 level++;
                 upCount = 0;
