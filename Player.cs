@@ -231,6 +231,10 @@ namespace consoleProejct
                         playSound.selectMode = false;       // selectMode 벗어나기
                         playSound.Update();
                         playMode = true;
+
+                        // 초기화
+                        for (int i = 0; i < result.Length; i++)
+                            result[i] = 0;
                         break;
                 }
             }
