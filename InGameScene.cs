@@ -47,9 +47,12 @@ namespace consoleProejct
         public void Render()
         {
             printBanner();
-            inGamePrint();
-            if(noteStart)
+
+            if (noteStart)
                 castingBar();
+
+            inGamePrint();
+            
         }
 
         public void levelUpCount()
@@ -107,6 +110,7 @@ namespace consoleProejct
         void inGamePrint()
         {
             ForegroundColor = ConsoleColor.White;
+            SetCursorPosition(0, 7);
             Write($"\t\t현재 레벨 : {level}\n");
 
             if(sec >= 3f)
@@ -123,7 +127,10 @@ namespace consoleProejct
                 {
                     Write("\t\t입력할 노트 : ");
                     if(verdict==0)
+                    {
+                        inList.Clear();
                         randomArrow(level);
+                    }
                 }
                 else
                     Write("\t\t입력할 노트 :\t\t\t");
@@ -168,10 +175,6 @@ namespace consoleProejct
                 castingSec = 0f;
                 verdict = 0;
                 castingTimer.Restart();
-
-                if(!inputSuccess)
-                    inList.Clear();
-
                 SetCursorPosition(40, 8);
                 Write("\t\t\t\t");
             }

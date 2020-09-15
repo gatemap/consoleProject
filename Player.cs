@@ -77,7 +77,7 @@ namespace consoleProejct
             if (playMode && inGame != null)
             {
                 inGame.Update();
-                if (inGame.noteStart && !inGame.inputSuccess && !playSound.fin)
+                if (inGame.noteStart && !inGame.inputSuccess && !playSound.fin && inGame.verdict >= 0)
                     playGameKeySettings();
 
                 // miss 판정
@@ -294,7 +294,6 @@ namespace consoleProejct
                             inGame.levelUpCount();
                             inGame.inputSuccess = true;
                             outList.Clear();
-                            inGame.inList.Clear();
                             SetCursorPosition(0, 11);
                             Write("\t\t입력한 노트 :\t\t\t");
                         }

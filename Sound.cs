@@ -75,8 +75,7 @@ namespace consoleProejct
                     if (inAdvance)
                         bgm.PlayPosition = 78 * 1000;
                     else
-                        //bgm.PlayPosition = 0;
-                        bgm.PlayPosition = 270 * 1000;
+                        bgm.PlayPosition = 0;
                     break;
                 case Music.K_DA:
                     bgm = engine.Play2D(soundPath + "K_DA.mp3");
