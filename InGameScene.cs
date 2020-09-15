@@ -57,38 +57,30 @@ namespace consoleProejct
 
         public void levelUpCount()
         {
-            switch (level)
+            switch (level+2)
             {
-                case 1:
+                case 3:
                     if (upCount > 0)
                         levelUp();
                     break;
-                case 2:
+                case 4:
                     if (upCount > 1)
                         levelUp();
                     break;
-                case 3:
+                case 5:
                     if (upCount > 2)
                         levelUp();
                     break;
-                case 4:
-                    if (upCount > 3)
-                        levelUp();
-                    break;
-                case 5:
-                    if (upCount > 4)
-                        levelUp();
-                    break;
                 case 6:
-                    if (upCount > 5)
+                    if (upCount > 3)
                         levelUp();
                     break;
                 case 7:
-                    if (upCount > 4)
+                    if (upCount > 3)
                         levelUp();
                     break;
                 case 8:
-                    if (upCount > 3)
+                    if (upCount > 4)
                         levelUp();
                     break;
                 case 9:
@@ -127,18 +119,18 @@ namespace consoleProejct
                 castingTimer.Start();
 
                 if (verdict == 0)
+                {
                     inputSuccess = false;
+                    inList.Clear();
+                }
 
                 SetCursorPosition(0, 10);
 
                 if(!inputSuccess)
                 {
                     Write("\t\t입력할 노트 : ");
-                    if(verdict==0)
-                    {
-                        inList.Clear();
-                        randomArrow(level);
-                    }
+                    if (verdict == 0)
+                        randomArrow(level + 2);
                 }
                 else
                     Write("\t\t입력할 노트 :\t\t\t");
