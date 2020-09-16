@@ -46,6 +46,7 @@ namespace consoleProejct
             {
                 timer.Restart();
                 isPlaying = false;
+                fin = false;
 
                 // 0.5초 딜레이
                 while (timer.ElapsedMilliseconds < 500)
