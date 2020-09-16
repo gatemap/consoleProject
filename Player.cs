@@ -61,18 +61,18 @@ namespace consoleProejct
                 }
             }
 
-            // select Song view
-            if (selectMusic != null && selectMusic.musicSelect)
-                selectMusic = null;
-
             // select Song advance song play
             if (playSound.selectMode)
             {
+                selectMusicKeySettings();
+
                 if (playSound.moving)
                     playSound.Update();
-
-                selectMusicKeySettings();
             }
+
+            // select Song view
+            if (selectMusic != null && selectMusic.musicSelect)
+                selectMusic = null;
 
             if (playMode && inGame != null)
             {
