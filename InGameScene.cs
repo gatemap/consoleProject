@@ -22,6 +22,7 @@ namespace consoleProejct
         float sec = 0f;
         float castingSec = 0f;
         byte timeAtt = 7;
+        byte maxLevel = 9;
         
         Stopwatch timeCheck;
         Stopwatch castingTimer;
@@ -72,7 +73,7 @@ namespace consoleProejct
                         levelUp();
                     break;
                 case 6:
-                    if (upCount > 3)
+                    if (upCount > 2)
                         levelUp();
                     break;
                 case 7:
@@ -91,7 +92,7 @@ namespace consoleProejct
                         // 3초 쉬기
                         while (tmpTimer.ElapsedMilliseconds > 3000)
                             ;
-                        level = 6;
+                        level = 5;
                         upCount = 0;
                     }
                     break;
@@ -100,7 +101,7 @@ namespace consoleProejct
 
         void levelUp()
         {
-            if (level < 9)
+            if (level < maxLevel)
             {
                 level++;
                 upCount = 0;
